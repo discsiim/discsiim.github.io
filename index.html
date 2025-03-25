@@ -274,6 +274,7 @@ ok9) diff punktidena lahtrisse
             let json = await response.json();
             
             let select = document.getElementById("playerSelect");
+			select.innerHTML="";
             json.Competition.Results.forEach(player => {
                 let option = document.createElement("option");
                 option.value = player.UserID;
