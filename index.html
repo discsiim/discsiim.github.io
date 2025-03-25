@@ -84,6 +84,9 @@
 		td.holari {
 			background-color:#ffb400;
 		}
+		td.penalty{
+			border: 2px solid red;
+		}
 		div.korviNumber{
 			display: inline;
 			font-weight: 600;
@@ -185,7 +188,7 @@ ok2) Refresh nupp
 ok3) "Tracks" massiivist korvilabel'id:  Number(NumberAlt) (kui erinevad), "Tracks":[{"Number":"16","NumberAlt":"L2","Par":"4"},...
 ok4) korvi parameeter class <td par="par+1">, par-1, par0, etc. 
 ok5) Tabel ilusaks, par/bogie/birdie sama css-iga nagu metrix
-6) Scrollitav tabel, nii et esimesed read alati nähtaval. Hetke skoor ja läbitud radu teise ritta: ntks. -4 (5/18)
+ok6) Scrollitav tabel, nii et esimesed read alati nähtaval. Hetke skoor ja läbitud radu teise ritta: ntks. -4 (5/18)
 ok7) initsiaalid
 ok8) nimede initsiaalide selgitus
 ok9) diff punktidena lahtrisse
@@ -218,7 +221,7 @@ ok9) diff punktidena lahtrisse
 				th.textContent= initials;
 				tableHeader.appendChild(th);
 				
-				let thTul=document.createElement("th")
+				let thTul=document.createElement("th");
 				thTul.textContent=results[i].Diff + " (" + results[i].Place +")";
 				tableHeaderTulemus.appendChild(thTul);	
 			}
@@ -254,13 +257,16 @@ ok9) diff punktidena lahtrisse
 						playedHolesCount[col]++; // Suurenda vastava mängija loendurit
 					}
 					
-					let res=results[col].PlayerResults[i].Result
-					let diff= results[col].PlayerResults[i].Diff
-
+					let res=results[col].PlayerResults[i].Result;
+					let diff= results[col].PlayerResults[i].Diff;
 					if (res==1) {
 						td.classList.add("holari");
 					}else{
 						td.classList.add("par"+ diff);
+					}
+					let penalty=results[col].PlayerResults[i].PEN;
+					if (penalty==1) {
+						td.classList.add("penalty");
 					}
 					
 					td.textContent=res;
@@ -271,7 +277,7 @@ ok9) diff punktidena lahtrisse
             }
 			//läbitud/läbimata korvid
 			for (let i = 0; i < results.length; i++) {
-				let thLab=document.createElement("th")
+				let thLab=document.createElement("th");
 				thLab.textContent=playedHolesCount[i] + "/" + results[i].PlayerResults.length;
 				tableHeaderLabitud.appendChild(thLab); 
 			}
