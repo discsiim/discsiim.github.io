@@ -84,10 +84,11 @@
 		td.holari {
 			background-color:#ffb400;
 		}
-		td.korviNumber{
+		div.korviNumber{
+			display: inline;
 			font-weight: 600;
 		}
-		.NumberAlt{
+		div.numberAlt{
 			display: inline;
 			color:#777;
 			font-size: 0.8em;
@@ -231,9 +232,13 @@ ok9) diff punktidena lahtrisse
             for (let i = 0; i < results[0].PlayerResults.length; i++) {
                 let row = document.createElement("tr");				
 				let td=document.createElement("td");
-				td.classList.add("korviNumber");
+				//td.classList.add("korviNumber");
+				let divK=document.createElement("div");
+				divK.classList.add("korviNumber");
 				let korv=korvid[i];
-				td.textContent=korv.Number;
+				divK.textContent=korv.Number;
+				td.appendChild(divK);
+				//td.textContent=korv.Number;
 				if (korv.NumberAlt){
 					let div=document.createElement("div");
 					div.classList.add("numberAlt");
