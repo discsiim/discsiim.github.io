@@ -145,7 +145,6 @@
 <body>
 	<button type="button" class="collapsible">Settings</button>
 	<div class="settings">
-		<h2>Kui vana mängu url on juba sisestatud, siis refreshi kogu site'i, et alustada puhtalt lehelt</h2>
 		<h2>Mängu Url:</h2>
 		<input type="text" id="gameID" name="gameID">
 		<button onclick="loadPlayers()">Lae mängijad:</button>
@@ -271,13 +270,17 @@ ok9) diff punktidena lahtrisse
         }
 
         async function loadPlayers() {
-			let compUrl=document.getElementById("gameID").textContent;
+			let compUrl=document.getElementById("gameID").value;
 			CompetitionID=compUrl.split('/').pop();
 			//CompetitionID=document.getElementById("gameID").value;
             let response = await fetch('https://discgolfmetrix.com/api.php?content=result&id='+CompetitionID);
             let json = await response.json();
             
             let select = document.getElementById("playerSelect");
+			//tühjendame select listi
+			while (select.firstChild) {
+				select.removeChild(select.firstChild);
+			}
 			select.innerHTML="";
             json.Competition.Results.forEach(player => {
                 let option = document.createElement("option");
