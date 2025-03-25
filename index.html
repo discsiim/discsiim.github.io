@@ -145,13 +145,15 @@
 <body>
 	<button type="button" class="collapsible">Settings</button>
 	<div class="settings">
-		<h2>Mängu ID:</h2>
+		<h2>Kui vana mängu url on juba sisestatud, siis refreshi kogu site'i, et alustada puhtalt lehelt</h2>
+		<h2>Mängu Url:</h2>
 		<input type="text" id="gameID" name="gameID">
-		<button onclick="loadPlayers()">Lae mängijad</button>
+		<button onclick="loadPlayers()">Lae mängijad:</button>
 		<h2>Vali mängijad</h2>
 		<select id="playerSelect" multiple>
 			<!-- Mängijad lisatakse dünaamiliselt -->
 		</select>
+		
 	</div>
 	
     <button type="button" class="refresh" onclick="fetchResults()">Lae/Värskenda tulemusi</button>
@@ -186,7 +188,7 @@ ok8) nimede initsiaalide selgitus
 ok9) diff punktidena lahtrisse
  -->
     <script>
-		let CompetitionID='3213882'
+		let CompetitionID='3213882';
         async function fetchResults() {
             let response = await fetch('https://discgolfmetrix.com/api.php?content=result&id='+CompetitionID);
             let json = await response.json();
@@ -269,7 +271,9 @@ ok9) diff punktidena lahtrisse
         }
 
         async function loadPlayers() {
-			CompetitionID=document.getElementById("gameID").value;
+			let compUrl=document.getElementById("gameID").textContent;
+			CompetitionID=compUrl.split('/').pop();
+			//CompetitionID=document.getElementById("gameID").value;
             let response = await fetch('https://discgolfmetrix.com/api.php?content=result&id='+CompetitionID);
             let json = await response.json();
             
