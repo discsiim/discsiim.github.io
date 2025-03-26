@@ -108,16 +108,20 @@
 		  background-color: #ff6700;
 		  color: white;
 		  cursor: pointer;
-		  padding: 6px;
+		  padding: 12px;
 		  width: 100%;
 		  border: none;
-		  text-align: left;
+		  text-align: center;
 		  outline: none;
+		  border-radius: 8px; /* Ümarad nurgad */
+		  margin-top: 6px; /* Lisa vahe eelmise elemendiga */
 		  font-size: 15px;
+		  transition: background-color 0.2s, transform 0.1s; /* Sujuvam efekt */
 		}
 		
 		.active, .refresh:hover {
 		  background-color: #dd5a00;
+		  transform: scale(1.02); /* Kerge suurenemine hover'il */
 		}
 		
 		.collapsible {
@@ -127,7 +131,7 @@
 		  padding: 6px;
 		  width: 100%;
 		  border: none;
-		  text-align: left;
+		  text-align: center;
 		  outline: none;
 		  font-size: 15px;
 		}
