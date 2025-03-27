@@ -13,7 +13,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Täna me ei skoori!</title>
-    <!--script src="https://unpkg.com/htmx.org@1.9.5"></script-->
 	<style>
 		body {
 		  background-color: #fffdf9;
@@ -308,6 +307,8 @@ ok9) diff punktidena lahtrisse
 				select.removeChild(select.firstChild);
 			}
 			select.innerHTML="";
+		// Sorteeri mängijad nime järgi
+		json.Competition.Results.sort((a, b) => a.Name.localeCompare(b.Name));
             json.Competition.Results.forEach(player => {
                 let option = document.createElement("option");
                 option.value = player.UserID;
