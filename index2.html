@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-T81QWPXXR1"></script>
+	<script>
+  		window.dataLayer = window.dataLayer || [];
+  		function gtag(){dataLayer.push(arguments);}
+  		gtag('js', new Date());
+
+  		gtag('config', 'G-T81QWPXXR1');
+	</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Täna me ei skoori!</title>
+	<style>
+		body {
+		  background-color: #fffdf9;
+		}
+		h2 {
+		  font-size: 16px;
+		  font-weight: 700;
+		}
+		div#lyhendid{
+			display: inline;
+			font-size:0.8em;
+		}
+		div#inits{
+			display: inline;
+			font-weight: 600;
+		}
+
+		table {
+			font-size: 14px;
+			line-height: 16px;
+			border-collapse: collapse;
+		}
+		table td {
+			border:1px solid #d8dfdb;
+			text-align:center;
+			padding: 4px 3px;
+		}
+
+		thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+		
+		th{
+			border:1px solid #d8dfdb;
+			text-align:center;
+		}
+		th.playerNimi{
+			font-weight: 600;
+			padding: 4px 3px;
+		}
+		tr#tulemus{
+			top: 16px;
+			background-color: #777;
+			color: white;
+			font-size: 0.8em;
+		}
+		tr#labitud{
+			top: 30px;
+			background-color: white;
+			color: #777;
+			font-size: 0.8em;
+		}
+		tr#table-header{
+			top: 0;
+			color: white;
+			background-color: #444;
+		}
+		td.par-1 {
+			background-color:#3ec30057;
+		}
+		td.par-2 {
+			background-color:#3ec300a3;
+		}
+		td.par1{
+			background-color:#f42b031f;
+		}
+		td.par2{
+			background-color:#f42b0342;
+		}
+		td.par3, td.par4, td.par5, td.par6 {
+			background-color:#f42b036b
+		}
+
+		td.holari {
+			background-color:#ffb400;
+		}
+		td.penalty{
+			border: 2px solid red;
+		}
+		div.korviNumber{
+			display: inline;
+			font-weight: 600;
+		}
+		div.numberAlt{
+			display: inline;
+			color:#777;
+			font-size: 0.8em;
+		}
+		.refresh {
+		  background-color: #ff6700;
+		  color: white;
+		  cursor: pointer;
+		  padding: 12px;
+		  width: 100%;
+		  border: none;
+		  text-align: center;
+		  outline: none;
+		  border-radius: 8px; /* Ümarad nurgad */
+		  margin-top: 6px; /* Lisa vahe eelmise elemendiga */
+		  font-size: 15px;
+		  transition: background-color 0.2s, transform 0.1s; /* Sujuvam efekt */
+		}
+		
+		.active, .refresh:hover {
+		  background-color: #dd5a00;
+		  transform: scale(1.02); /* Kerge suurenemine hover'il */
+		}
+		
+		.collapsible {
+		  background-color: #777;
+		  color: white;
+		  cursor: pointer;
+		  padding: 6px;
+		  width: 100%;
+		  border: none;
+		  text-align: center;
+		  outline: none;
+		  font-size: 15px;
+		}
+
+		.active, .collapsible:hover {
+		  background-color: #444;
+		}
+
+		.collapsible:after {
+		  content: '\002B';
+		  color: white;
+		  font-weight: bold;
+		  float: right;
+		  margin-left: 5px;
+		}
+
+		.active:after {
+		  content: "\2212";
+		}
+
+		.settings {
+		  padding: 0 18px;
+		  max-height: 0;
+		  overflow: hidden;
+		  transition: max-height 0.2s ease-out;
+		  background-color: #f1f1f1;
+		}
+	</style>
+</head>
+<body>
+	<button type="button" class="collapsible">Settings</button>
+	<div class="settings">
+		<h2>Mängu Url:</h2>
+		<input type="text" id="gameID" name="gameID">
+		<button onclick="loadPlayers()">Lae mängijad:</button>
+		<h2>Vali mängijad</h2>
+		<select id="playerSelect" multiple>
+			<!-- Mängijad lisatakse dünaamiliselt -->
+		</select>
+		
+	</div>
+	
+    <button type="button" class="refresh" onclick="fetchResults()">Lae/Värskenda tulemusi</button>
+	<div id="lyhendid">
+		
+	</div>
+    <table border="1">
+        <thead>
+            <tr id="table-header">
+                <th></th>
+            </tr>
+			<tr id="tulemus">
+                <th></th>
+            </tr>
+			<tr id="labitud">
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- Dünaamilised andmed siia -->
+        </tbody>
+    </table>
+<!-- TODO: 
+ok1) Foldable/peidetav Settings: set competition-id -> Select Player list
+ok2) Refresh nupp
+ok3) "Tracks" massiivist korvilabel'id:  Number(NumberAlt) (kui erinevad), "Tracks":[{"Number":"16","NumberAlt":"L2","Par":"4"},...
+ok4) korvi parameeter class <td par="par+1">, par-1, par0, etc. 
+ok5) Tabel ilusaks, par/bogie/birdie sama css-iga nagu metrix
+ok6) Scrollitav tabel, nii et esimesed read alati nähtaval. Hetke skoor ja läbitud radu teise ritta: ntks. -4 (5/18)
+ok7) initsiaalid
+ok8) nimede initsiaalide selgitus
+ok9) diff punktidena lahtrisse
+ -->
+    <script>
+		let competitionID = '3213882';
+
+    async function fetchResults() {
+        const response = await fetch(`https://discgolfmetrix.com/api.php?content=result&id=${competitionID}`);
+        const json = await response.json();
+
+        const selectedPlayers = Array.from(document.getElementById('playerSelect').selectedOptions)
+            .map(opt => opt.value);
+        const results = json.Competition.Results.filter(p => selectedPlayers.includes(p.UserID));
+        const korvid = json.Competition.Tracks;
+
+        const divLyhendid = document.getElementById("lyhendid");
+        divLyhendid.innerHTML = "";
+
+        const tableHeader = document.getElementById("table-header");
+        const tableHeaderTulemus = document.getElementById("tulemus");
+        const tableHeaderLabitud = document.getElementById("labitud");
+
+        tableHeader.innerHTML = "<th></th>";
+        tableHeaderTulemus.innerHTML = "<th>+/-</th>";
+        tableHeaderLabitud.innerHTML = "<th>Läb</th>";
+
+        for (const player of results) {
+            const th = document.createElement("th");
+            th.classList.add("playerNimi");
+
+            // Kuvatakse ainult initsiaalid:
+            const initials = player.Name.split(" ").map(n => n.charAt(0)).join("");
+            divLyhendid.textContent += `${initials}: ${player.Name}, `;
+            th.textContent = initials;
+            tableHeader.appendChild(th);
+
+            const thTul = document.createElement("th");
+            thTul.textContent = `${player.Diff} (${player.Place})`;
+            tableHeaderTulemus.appendChild(thTul);
+        }
+
+        const tableBody = document.getElementById("table-body");
+        tableBody.innerHTML = "";
+
+        const playedHolesCount = new Array(results.length).fill(0);
+
+        for (let i = 0; i < results[0].PlayerResults.length; i++) {
+            const row = document.createElement("tr");
+
+            const tdKorv = document.createElement("td");
+            const divK = document.createElement("div");
+            divK.classList.add("korviNumber");
+
+            const korv = korvid[i];
+            divK.textContent = korv.Number;
+            tdKorv.appendChild(divK);
+
+            if (korv.NumberAlt) {
+                const divAlt = document.createElement("div");
+                divAlt.classList.add("numberAlt");
+                divAlt.textContent = `(${korv.NumberAlt})`;
+                tdKorv.appendChild(divAlt);
+            }
+
+            row.appendChild(tdKorv);
+
+            for (let col = 0; col < results.length; col++) {
+                const td = document.createElement("td");
+                const pr = results[col].PlayerResults[i];
+
+                if (pr && pr.Result !== undefined && pr.Result !== "") {
+                    playedHolesCount[col]++;
+                }
+
+                if (pr) {
+                    const { Result: res, Diff: diff, PEN: penalty } = pr;
+
+                    if (res == 1) {
+                        td.classList.add("holari");
+                    } else {
+                        td.classList.add(`par${diff}`);
+                    }
+
+                    if (penalty == 1) {
+                        td.classList.add("penalty");
+                    }
+
+                    td.textContent = res;
+                }
+
+                row.appendChild(td);
+            }
+
+            tableBody.appendChild(row);
+        }
+
+        // läbitud/läbimata korvid
+        for (let i = 0; i < results.length; i++) {
+            const thLab = document.createElement("th");
+            thLab.textContent = `${playedHolesCount[i]}/${results[i].PlayerResults.length}`;
+            tableHeaderLabitud.appendChild(thLab);
+        }
+    }
+
+    async function loadPlayers() {
+        const compUrl = document.getElementById("gameID").value;
+        competitionID = compUrl.split('/').pop();
+
+        const response = await fetch(`https://discgolfmetrix.com/api.php?content=result&id=${competitionID}`);
+        const json = await response.json();
+
+        const select = document.getElementById("playerSelect");
+        select.innerHTML = "";
+
+        // Sorteeri mängijad nime järgi
+        json.Competition.Results.sort((a, b) => a.Name.localeCompare(b.Name));
+
+        for (const player of json.Competition.Results) {
+            const option = document.createElement("option");
+            option.value = player.UserID;
+            option.textContent = player.Name;
+            select.appendChild(option);
+        }
+    }
+
+		
+		/*Settingud collapsible'iks*/
+		var coll = document.getElementsByClassName("collapsible");
+		var i;
+
+		for (i = 0; i < coll.length; i++) {
+		  coll[i].addEventListener("click", function() {
+			this.classList.toggle("active");
+			var content = this.nextElementSibling;
+			if (content.style.maxHeight){
+			  content.style.maxHeight = null;
+			} else {
+			  content.style.maxHeight = content.scrollHeight + "px";
+			} 
+		  });
+		}
+        //document.addEventListener("DOMContentLoaded", loadPlayers);
+    </script>
+</body>
+</html>
