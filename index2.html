@@ -357,6 +357,10 @@ ok9) diff punktidena lahtrisse
             par0Value = baskets.reduce((sum, b) => sum + Number(b.Par || 0), 0);
             const divTest = document.getElementById("test");
             divTest.innerHTML = par0Value;
+            divTest.textContent += `ratingValue1: ${ratingValue1}, `;
+            divTest.textContent += `ratingValue2: ${ratingValue2}, `;
+            divTest.textContent += `ratingResult1: ${ratingResult1}, `;
+            divTest.textContent += `ratingResult2: ${ratingResult2}, `;
         }
 		
 		/*Settingud collapsible'iks*/
