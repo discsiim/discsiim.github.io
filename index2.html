@@ -210,130 +210,154 @@ ok9) diff punktidena lahtrisse
     <script>
 		let competitionID = '3213882';
         let courseID='';
-    async function fetchResults() {
-        const response = await fetch(`https://discgolfmetrix.com/api.php?content=result&id=${competitionID}`);
-        const json = await response.json();
+        const pCode='PtEwQhiM7PMOc6NMEv0tk9pBW4Rthaum';
+        let ratingValue1 = 0;
+        let ratingValue2 = 0;
+        let ratingResult1 = 0;
+        let ratingResult2 = 0;
+        let par0Value = 0;
+        async function fetchResults() {
+            const response = await fetch(`https://discgolfmetrix.com/api.php?content=result&id=${competitionID}`);
+            const json = await response.json();
 
-        const selectedPlayers = Array.from(document.getElementById('playerSelect').selectedOptions)
-            .map(opt => opt.value);
-        const results = json.Competition.Results.filter(p => selectedPlayers.includes(p.UserID));
-        const korvid = json.Competition.Tracks;
+            const selectedPlayers = Array.from(document.getElementById('playerSelect').selectedOptions)
+                .map(opt => opt.value);
+            const results = json.Competition.Results.filter(p => selectedPlayers.includes(p.UserID));
+            const korvid = json.Competition.Tracks;
 
-        const divLyhendid = document.getElementById("lyhendid");
-        divLyhendid.innerHTML = "";
+            const divLyhendid = document.getElementById("lyhendid");
+            divLyhendid.innerHTML = "";
 
-        const tableHeader = document.getElementById("table-header");
-        const tableHeaderTulemus = document.getElementById("tulemus");
-        const tableHeaderLabitud = document.getElementById("labitud");
+            const tableHeader = document.getElementById("table-header");
+            const tableHeaderTulemus = document.getElementById("tulemus");
+            const tableHeaderLabitud = document.getElementById("labitud");
 
-        tableHeader.innerHTML = "<th></th>";
-        tableHeaderTulemus.innerHTML = "<th>+/-</th>";
-        tableHeaderLabitud.innerHTML = "<th>Läb</th>";
+            tableHeader.innerHTML = "<th></th>";
+            tableHeaderTulemus.innerHTML = "<th>+/-</th>";
+            tableHeaderLabitud.innerHTML = "<th>Läb</th>";
 
-        for (const player of results) {
-            const th = document.createElement("th");
-            th.classList.add("playerNimi");
+            for (const player of results) {
+                const th = document.createElement("th");
+                th.classList.add("playerNimi");
 
-            // Kuvatakse ainult initsiaalid:
-            const initials = player.Name.split(" ").map(n => n.charAt(0)).join("");
-            divLyhendid.textContent += `${initials}: ${player.Name}, `;
-            th.textContent = initials;
-            tableHeader.appendChild(th);
+                // Kuvatakse ainult initsiaalid:
+                const initials = player.Name.split(" ").map(n => n.charAt(0)).join("");
+                divLyhendid.textContent += `${initials}: ${player.Name}, `;
+                th.textContent = initials;
+                tableHeader.appendChild(th);
 
-            const thTul = document.createElement("th");
-            thTul.textContent = `${player.Diff} (${player.Place})`;
-            tableHeaderTulemus.appendChild(thTul);
-        }
-
-        const tableBody = document.getElementById("table-body");
-        tableBody.innerHTML = "";
-
-        const playedHolesCount = new Array(results.length).fill(0);
-
-        for (let i = 0; i < results[0].PlayerResults.length; i++) {
-            const row = document.createElement("tr");
-
-            const tdKorv = document.createElement("td");
-            const divK = document.createElement("div");
-            divK.classList.add("korviNumber");
-
-            const korv = korvid[i];
-            divK.textContent = korv.Number;
-            tdKorv.appendChild(divK);
-
-            if (korv.NumberAlt) {
-                const divAlt = document.createElement("div");
-                divAlt.classList.add("numberAlt");
-                divAlt.textContent = `(${korv.NumberAlt})`;
-                tdKorv.appendChild(divAlt);
+                const thTul = document.createElement("th");
+                thTul.textContent = `${player.Diff} (${player.Place})`;
+                tableHeaderTulemus.appendChild(thTul);
             }
 
-            row.appendChild(tdKorv);
+            const tableBody = document.getElementById("table-body");
+            tableBody.innerHTML = "";
 
-            for (let col = 0; col < results.length; col++) {
-                const td = document.createElement("td");
-                const pr = results[col].PlayerResults[i];
+            const playedHolesCount = new Array(results.length).fill(0);
 
-                if (pr && pr.Result !== undefined && pr.Result !== "") {
-                    playedHolesCount[col]++;
+            for (let i = 0; i < results[0].PlayerResults.length; i++) {
+                const row = document.createElement("tr");
+
+                const tdKorv = document.createElement("td");
+                const divK = document.createElement("div");
+                divK.classList.add("korviNumber");
+
+                const korv = korvid[i];
+                divK.textContent = korv.Number;
+                tdKorv.appendChild(divK);
+
+                if (korv.NumberAlt) {
+                    const divAlt = document.createElement("div");
+                    divAlt.classList.add("numberAlt");
+                    divAlt.textContent = `(${korv.NumberAlt})`;
+                    tdKorv.appendChild(divAlt);
                 }
 
-                if (pr) {
-                    const { Result: res, Diff: diff, PEN: penalty } = pr;
+                row.appendChild(tdKorv);
 
-                    if (res == 1) {
-                        td.classList.add("holari");
-                    } else {
-                        td.classList.add(`par${diff}`);
+                for (let col = 0; col < results.length; col++) {
+                    const td = document.createElement("td");
+                    const pr = results[col].PlayerResults[i];
+
+                    if (pr && pr.Result !== undefined && pr.Result !== "") {
+                        playedHolesCount[col]++;
                     }
 
-                    if (penalty == 1) {
-                        td.classList.add("penalty");
+                    if (pr) {
+                        const { Result: res, Diff: diff, PEN: penalty } = pr;
+
+                        if (res == 1) {
+                            td.classList.add("holari");
+                        } else {
+                            td.classList.add(`par${diff}`);
+                        }
+
+                        if (penalty == 1) {
+                            td.classList.add("penalty");
+                        }
+
+                        td.textContent = res;
                     }
 
-                    td.textContent = res;
+                    row.appendChild(td);
                 }
 
-                row.appendChild(td);
+                tableBody.appendChild(row);
             }
 
-            tableBody.appendChild(row);
+            // läbitud/läbimata korvid
+            for (let i = 0; i < results.length; i++) {
+                const thLab = document.createElement("th");
+                thLab.textContent = `${playedHolesCount[i]}/${results[i].PlayerResults.length}`;
+                tableHeaderLabitud.appendChild(thLab);
+            }
         }
 
-        // läbitud/läbimata korvid
-        for (let i = 0; i < results.length; i++) {
-            const thLab = document.createElement("th");
-            thLab.textContent = `${playedHolesCount[i]}/${results[i].PlayerResults.length}`;
-            tableHeaderLabitud.appendChild(thLab);
+        async function loadPlayers() {
+            const compUrl = document.getElementById("gameID").value;
+            competitionID = compUrl.split('/').pop();
+            
+            const response = await fetch(`https://discgolfmetrix.com/api.php?content=result&id=${competitionID}`);
+            const json = await response.json();
+            courseID=json.Competition.CourseID;
+
+
+
+            const select = document.getElementById("playerSelect");
+            select.innerHTML = "";
+
+            // Sorteeri mängijad nime järgi
+            json.Competition.Results.sort((a, b) => a.Name.localeCompare(b.Name));
+
+            for (const player of json.Competition.Results) {
+                const option = document.createElement("option");
+                option.value = player.UserID;
+                option.textContent = player.Name;
+                select.appendChild(option);
+            }
+            loadCourseInfo();
         }
-    }
+        async function loadCourseInfo(){
+            //https://discgolfmetrix.com/api.php?content=course&id=34412&code=PtEwQhiM7PMOc6NMEv0tk9pBW4Rthaum
 
-    async function loadPlayers() {
-        const compUrl = document.getElementById("gameID").value;
-        competitionID = compUrl.split('/').pop();
-        
-        const response = await fetch(`https://discgolfmetrix.com/api.php?content=result&id=${competitionID}`);
-        const json = await response.json();
-        courseID=json.Competition.CourseID;
-        const divTest = document.getElementById("test");
-        divTest.innerHTML = "" + courseID;
+            const response = await fetch(`https://discgolfmetrix.com/api.php?content=course&id=${courseID}&code=PtEwQhiM7PMOc6NMEv0tk9pBW4Rthaum`);
+            const json = await response.json();
 
+            const course = json.course;
+            const baskets = json.baskets;
 
-        const select = document.getElementById("playerSelect");
-        select.innerHTML = "";
+            // Assign global values
+            ratingValue1 = parseFloat(course.RatingValue1);
+            ratingValue2 = parseFloat(course.RatingValue2);
+            ratingResult1 = parseFloat(course.RatingResult1);
+            ratingResult2 = parseFloat(course.RatingResult2);
 
-        // Sorteeri mängijad nime järgi
-        json.Competition.Results.sort((a, b) => a.Name.localeCompare(b.Name));
-
-        for (const player of json.Competition.Results) {
-            const option = document.createElement("option");
-            option.value = player.UserID;
-            option.textContent = player.Name;
-            select.appendChild(option);
+            // Sum all Par values (ensure numbers)
+            par0Value = baskets.reduce((sum, b) => sum + Number(b.Par || 0), 0);
+            const divTest = document.getElementById("test");
+            divTest.innerHTML = par0Value;
         }
-        //"CourseID":"34412"
-    }
-
 		
 		/*Settingud collapsible'iks*/
 		var coll = document.getElementsByClassName("collapsible");
