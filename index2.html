@@ -238,7 +238,7 @@ ok9) diff punktidena lahtrisse
             tableHeader.innerHTML = "<th></th>";
             tableHeaderTulemus.innerHTML = "<th>+/-</th>";
             tableHeaderLabitud.innerHTML = "<th>Läb</th>";
-            tableHeaderLabitud.innerHTML = "<th>Rtg</th>";
+            tableHeaderRating.innerHTML = "<th>Rtg</th>";
 
             for (const player of results) {
                 const th = document.createElement("th");
@@ -257,6 +257,7 @@ ok9) diff punktidena lahtrisse
                 const thRating=document.createElement("th");
                 let ratingVal=getRating(parseInt(player.Diff));
                 thRating.textContent='$(ratingVal)';
+                tableHeaderRating.appendChild(thRating);
             }
 
             const tableBody = document.getElementById("table-body");
