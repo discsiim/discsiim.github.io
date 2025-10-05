@@ -211,11 +211,10 @@ ok9) diff punktidena lahtrisse
 		let competitionID = '3213882';
         let courseID='';
         const pCode='PtEwQhiM7PMOc6NMEv0tk9pBW4Rthaum';
-        let ratingValue1 = 0;
-        let ratingValue2 = 0;
-        let ratingResult1 = 0;
-        let ratingResult2 = 0;
+        let ratingKordaja = 0;   
+        let ratingVabaliige = 0; 
         let par0Value = 0;
+
         async function fetchResults() {
             const response = await fetch(`https://discgolfmetrix.com/api.php?content=result&id=${competitionID}`);
             const json = await response.json();
@@ -348,19 +347,26 @@ ok9) diff punktidena lahtrisse
             const baskets = json.baskets;
 
             // Assign global values
-            ratingValue1 = parseFloat(course.RatingValue1);
-            ratingValue2 = parseFloat(course.RatingValue2);
-            ratingResult1 = parseFloat(course.RatingResult1);
-            ratingResult2 = parseFloat(course.RatingResult2);
+            const ratingValue1 = parseFloat(course.RatingValue1);
+            const ratingValue2 = parseFloat(course.RatingValue2);
+            const ratingResult1 = parseFloat(course.RatingResult1);
+            const ratingResult2 = parseFloat(course.RatingResult2);
+
+            ratingKordaja = (ratingValue2 - ratingValue1) / (ratingResult2 - ratingResult1);
+            ratingVabaliige = ratingValue1 - ratingKordaja * ratingResult1;
 
             // Sum all Par values (ensure numbers)
             par0Value = baskets.reduce((sum, b) => sum + Number(b.Par || 0), 0);
+            
             const divTest = document.getElementById("test");
             divTest.innerHTML = par0Value;
             divTest.textContent += `ratingValue1: ${ratingValue1}, `;
             divTest.textContent += `ratingValue2: ${ratingValue2}, `;
             divTest.textContent += `ratingResult1: ${ratingResult1}, `;
             divTest.textContent += `ratingResult2: ${ratingResult2}, `;
+            divTest.textContent += `ratingKordaja: ${ratingKordaja}, `;
+            divTest.textContent += `ratingVabaliige: ${ratingVabaliige}, `;
+
         }
 		
 		/*Settingud collapsible'iks*/
