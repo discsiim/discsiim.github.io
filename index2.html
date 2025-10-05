@@ -314,7 +314,7 @@ ok9) diff punktidena lahtrisse
         
         const response = await fetch(`https://discgolfmetrix.com/api.php?content=result&id=${competitionID}`);
         const json = await response.json();
-        courseID=json.Competition.courseID.textContent;
+        courseID=json.Competition.CourseID;
         const divTest = document.getElementById("test");
         divTest.innerHTML = "" + courseID;
 
