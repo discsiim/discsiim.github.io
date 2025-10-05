@@ -316,7 +316,7 @@ ok9) diff punktidena lahtrisse
         const json = await response.json();
         courseID=json.Competition.courseID.textContent;
         const divTest = document.getElementById("test");
-        divTest.innerHTML = courseID;
+        divTest.innerHTML = "" + courseID;
 
 
         const select = document.getElementById("playerSelect");
