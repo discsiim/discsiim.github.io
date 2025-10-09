@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Täna me ei skoori!</title>
-	<style>
+		<style>
 		body {
 		  background-color: #fffdf9;
 		}
@@ -133,12 +133,15 @@
 		  background-color: #777;
 		  color: white;
 		  cursor: pointer;
-		  padding: 6px;
+		  padding: 12px;
 		  width: 100%;
 		  border: none;
 		  text-align: center;
 		  outline: none;
 		  font-size: 15px;
+		  border-radius: 8px; /* Ümarad nurgad */
+		  margin-top: 6px; /* Lisa vahe eelmise elemendiga */
+		  transition: background-color 0.2s, transform 0.1s; /* Sujuvam efekt */
 		}
 
 		.active, .collapsible:hover {
@@ -167,10 +170,10 @@
 	</style>
 </head>
 <body>
-	<button type="button" class="collapsible">Settings</button>
+	<button type="button" class="collapsible">⚙️ Seaded</button>
 	<div class="settings">
 		<h2>Mängu Url:</h2>
-		<input type="text" id="gameID" name="gameID">
+		<input type="text" id="gameID" name="gameID" placeholder="https://discgolfmetrix.com/...>
 		<button onclick="loadPlayers()">Lae mängijad:</button>
 		<h2>Vali mängijad</h2>
 		<select id="playerSelect" multiple>
@@ -179,10 +182,8 @@
 		
 	</div>
 	
-    <button type="button" class="refresh" onclick="fetchResults()">Lae/Värskenda tulemusi</button>
-    <div id="test">
+    <button type="button" class="refresh" onclick="fetchResults()">🔄 Lae/Värskenda tulemusi</button>
 
-    </div>
 	<div id="lyhendid">
 		
 	</div>
