@@ -122,11 +122,14 @@
 	}
 
     .settings {
-      padding: 12px;
-      border-radius: 0 0 10px 10px;
-      background-color: #f8f9fa;
-      border: 1px solid #dee2e6;
-      margin-bottom: 12px;
+		padding: 12px;
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.2s ease-out;
+		border-radius: 0 0 10px 10px;
+		background-color: #f8f9fa;
+		border: 1px solid #dee2e6;
+		margin-bottom: 12px;
     }
 
     div#lyhendid {
@@ -142,8 +145,10 @@
 </head>
 <body class="container py-3">
 
-  <button type="button" class="collapsible mb-2">⚙️ Seaded</button>
-  <div class="settings">
+  <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#settingsPanel" aria-expanded="false" aria-controls="settingsPanel">
+      ⚙️ Seaded
+    </button>
+  <div class="collapse" id="settingsPanel">
     <h2>Mängu URL:</h2>
     <div class="input-group mb-2">
       <input type="text" id="gameID" class="form-control" placeholder="https://discgolfmetrix.com/...">
