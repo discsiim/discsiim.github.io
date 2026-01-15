@@ -40,13 +40,13 @@
         .table-container {
             overflow-x: auto;
             position: relative;
-            max-height: 80vh; /* Hoiab tabeli ekraani piires */
+            max-height: 85vh; /* Hoiab tabeli ekraani piires, suurendatud pisut */
         }
 
         table {
             font-size: 14px;
-            line-height: 16px;
-            border-collapse: separate; /* Vajalik sticky headeri jaoks borderitega */
+            line-height: 14px; /* Tihedam tekst */
+            border-collapse: separate; 
             border-spacing: 0;
             width: 100%;
         }
@@ -54,7 +54,7 @@
         table td, table th {
             border: 1px solid #d8dfdb;
             text-align: center;
-            padding: 6px 4px;
+            padding: 2px 1px; /* Vähendatud padding vertikaalseks kokkusurumiseks */
             vertical-align: middle;
         }
 
@@ -64,11 +64,42 @@
             z-index: 10;
         }
 
-        /* Määrame sticky positsioonid igale päisereale */
-        tr#table-header th { top: 0; background-color: var(--header-bg); color: var(--header-text); border-color: #555; height: 40px; }
-        tr#tulemus th { top: 40px; background-color: var(--sub-header-bg); color: white; font-size: 0.85em; height: 30px; }
-        tr#rating th { top: 70px; background-color: var(--rating-bg); color: var(--rating-text); font-size: 0.85em; height: 30px; }
-        tr#labitud th { top: 100px; background-color: white; color: #777; font-size: 0.85em; height: 30px; border-bottom: 2px solid #ccc; }
+        /* Määrame uued, tihedamad sticky positsioonid */
+        /* Kokku headeri kõrgus: 32 + 22 + 22 + 22 = 98px (enne oli 130px) */
+        
+        tr#table-header th { 
+            top: 0; 
+            background-color: var(--header-bg); 
+            color: var(--header-text); 
+            border-color: #555; 
+            height: 32px; 
+            font-size: 0.9em;
+        }
+        
+        tr#tulemus th { 
+            top: 32px; 
+            background-color: var(--sub-header-bg); 
+            color: white; 
+            font-size: 0.8em; 
+            height: 22px; 
+        }
+        
+        tr#rating th { 
+            top: 54px; 
+            background-color: var(--rating-bg); 
+            color: var(--rating-text); 
+            font-size: 0.8em; 
+            height: 22px; 
+        }
+        
+        tr#labitud th { 
+            top: 76px; 
+            background-color: white; 
+            color: #777; 
+            font-size: 0.8em; 
+            height: 22px; 
+            border-bottom: 2px solid #ccc; 
+        }
 
         /* Tulemuste värvid */
         td.par-1 { background-color: var(--color-par-minus-1); }
@@ -80,12 +111,12 @@
         td.penalty { border: 2px solid red !important; }
 
         .korviNumber { font-weight: 700; font-size: 1.1em; }
-        .numberAlt { color: #777; font-size: 0.8em; display: block; }
+        .numberAlt { color: #777; font-size: 0.8em; display: block; line-height: 1; }
         
         .playerNimi { font-weight: 600; text-transform: uppercase; }
 
         /* Legend */
-        #lyhendid { font-size: 0.85em; color: #555; line-height: 1.4; }
+        #lyhendid { font-size: 0.8em; color: #555; line-height: 1.2; }
 
         /* Checkbox list stiilid */
         .player-checkbox-list {
@@ -111,13 +142,23 @@
             border-color: #dd5a00;
             color: white;
         }
+
+        /* Accordion kompaktsemaks */
+        .accordion-button {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        .accordion-body {
+            padding: 0.75rem;
+        }
     </style>
 </head>
 <body>
 
-<div class="container-fluid py-3 px-2">
+<div class="container-fluid py-2 px-1">
     <!-- Seaded Accordion -->
-    <div class="accordion mb-3" id="settingsAccordion">
+    <div class="accordion mb-2" id="settingsAccordion">
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
@@ -126,22 +167,22 @@
             </h2>
             <div id="collapseSettings" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#settingsAccordion">
                 <div class="accordion-body bg-light">
-                    <div class="mb-3">
-                        <label for="gameID" class="form-label fw-bold">Mängu URL või ID:</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="gameID" placeholder="Kopeeri siia mängu link: https://discgolfmetrix.com/...">
+                    <div class="mb-2">
+                        <label for="gameID" class="form-label fw-bold small mb-1">Mängu URL või ID:</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" id="gameID" placeholder="https://discgolfmetrix.com/..." value="3213882">
                             <button class="btn btn-primary" type="button" onclick="loadPlayers()">Lae mängijad</button>
                         </div>
                     </div>
                     
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Vali mängijad:</label>
+                    <div class="mb-1">
+                        <label class="form-label fw-bold small mb-1">Vali mängijad:</label>
                         <div class="d-flex gap-2 mb-2">
-                            <button class="btn btn-sm btn-outline-secondary" onclick="toggleAllPlayers(true)">Vali kõik</button>
-                            <button class="btn btn-sm btn-outline-secondary" onclick="toggleAllPlayers(false)">Tühista valik</button>
+                            <button class="btn btn-sm btn-outline-secondary py-0" style="font-size: 0.8rem;" onclick="toggleAllPlayers(true)">Vali kõik</button>
+                            <button class="btn btn-sm btn-outline-secondary py-0" style="font-size: 0.8rem;" onclick="toggleAllPlayers(false)">Tühista</button>
                         </div>
                         <div id="playerCheckboxes" class="player-checkbox-list">
-                            <div class="text-muted small p-2">Mängijate laadimiseks sisesta ID ja vajuta nuppu...</div>
+                            <div class="text-muted small p-1">Sisesta ID ja vajuta "Lae mängijad"...</div>
                         </div>
                     </div>
                 </div>
@@ -150,12 +191,12 @@
     </div>
 
     <!-- Juhtnupud -->
-    <button type="button" class="btn btn-orange w-100 py-2 mb-3 fw-bold shadow-sm" onclick="fetchResults()">
+    <button type="button" class="btn btn-orange w-100 py-2 mb-2 fw-bold shadow-sm" style="font-size: 0.9rem;" onclick="fetchResults()">
         🔄 Lae / Värskenda tulemusi
     </button>
 
     <!-- Legend -->
-    <div id="lyhendid" class="mb-2 px-1"></div>
+    <div id="lyhendid" class="mb-1 px-1"></div>
 
     <!-- Tulemuste tabel -->
     <div class="table-container shadow-sm rounded">
@@ -191,19 +232,17 @@
 <script>
     let competitionID = "";
     let courseID = "";
-    // Märkus: API kood peaks ideaalis olema server-side või peidetud, 
-    // kuid front-end lahenduse puhul on see paratamatu.
     const pCode = "PtEwQhiM7PMOc6NMEv0tk9pBW4Rthaum";
     let ratingKordaja = 0;   
     let ratingVabaliige = 0; 
     let par0Value = 0;
 
-    // Helper: Parsib URL-ist või stringist ID
     function getCompetitionIdFromInput() {
         const inputVal = document.getElementById("gameID").value.trim();
         if (inputVal.includes("discgolfmetrix.com")) {
-            competitionID = inputVal.split("/").pop();
-            return competitionID; 
+            const parts = inputVal.split("/");
+            const cleanParts = parts.filter(p => p !== "");
+            return cleanParts.pop().split("?")[0]; 
         }
         return inputVal;
     }
@@ -225,11 +264,8 @@
             }
 
             courseID = json.Competition.CourseID;
-
             const container = document.getElementById("playerCheckboxes");
             container.innerHTML = "";
-
-            // Sorteeri nime järgi
             const sortedResults = json.Competition.Results.sort((a, b) => a.Name.localeCompare(b.Name));
 
             if (sortedResults.length === 0) {
@@ -246,11 +282,9 @@
                 checkbox.type = "checkbox";
                 checkbox.value = player.UserID;
                 checkbox.id = `player-${player.UserID}`;
-                // Vaikimisi valime kõik, või laseme kasutajal valida
-                // checkbox.checked = true; 
 
                 const label = document.createElement("label");
-                label.className = "form-check-label";
+                label.className = "form-check-label small"; // Small font for labels
                 label.htmlFor = `player-${player.UserID}`;
                 label.textContent = player.Name;
 
@@ -259,7 +293,6 @@
                 container.appendChild(div);
             });
 
-            // Ava seaded, kui need pole lahti (et kasutaja näeks mängijaid)
             const collapseElement = document.getElementById('collapseSettings');
             const bsCollapse = new bootstrap.Collapse(collapseElement, { toggle: false });
             bsCollapse.show();
@@ -289,18 +322,17 @@
             const ratingResult1 = parseFloat(course.RatingResult1);
             const ratingResult2 = parseFloat(course.RatingResult2);
 
-            // Reitingu arvutus
             ratingKordaja = (ratingValue2 - ratingValue1) / (ratingResult2 - ratingResult1);
             ratingVabaliige = ratingValue1 - ratingKordaja * ratingResult1;
 
             par0Value = baskets.reduce((sum, b) => sum + Number(b.Par || 0), 0);
         } catch (e) {
-            console.log("Course info loading failed (might be expected for non-admin API)", e);
+            console.log("Course info loading failed", e);
         }
     }
 
     function getRating(diff) {
-        if (!ratingKordaja) return 0; // Kui reitingu infot ei saadud
+        if (!ratingKordaja) return 0;
         return ratingKordaja * (diff + par0Value) + ratingVabaliige;
     }
 
@@ -308,7 +340,6 @@
         competitionID = getCompetitionIdFromInput();
         if (!competitionID) return;
 
-        // Leia valitud mängijad checkboxidest
         const checkboxes = document.querySelectorAll('.player-checkbox:checked');
         const selectedIds = Array.from(checkboxes).map(cb => cb.value);
 
@@ -324,17 +355,14 @@
             const results = json.Competition.Results.filter(p => selectedIds.includes(p.UserID));
             const korvid = json.Competition.Tracks;
 
-            // Uuenda legendi
             const divLyhendid = document.getElementById("lyhendid");
             divLyhendid.innerHTML = "";
 
-            // Uuenda päiseid
             const tableHeader = document.getElementById("table-header");
             const tableHeaderTulemus = document.getElementById("tulemus");
             const tableHeaderLabitud = document.getElementById("labitud");
             const tableHeaderRating = document.getElementById("rating");
 
-            // Reset headers (säilita esimene tühi lahter)
             tableHeader.innerHTML = "<th>#</th>";
             tableHeaderTulemus.innerHTML = "<th>+/-</th>";
             tableHeaderLabitud.innerHTML = "<th>Läb</th>";
@@ -343,27 +371,23 @@
             results.forEach(player => {
                 const initials = player.Name.split(" ").map(n => n.charAt(0)).join("");
                 
-                // Lisa legendi
                 const badge = document.createElement("span");
                 badge.className = "badge bg-secondary me-1 mb-1 fw-normal";
+                badge.style.fontSize = "0.75em"; // Smaller badge font
                 badge.textContent = `${initials}: ${player.Name}`;
                 divLyhendid.appendChild(badge);
 
-                // Päis: Initsiaalid
                 const th = document.createElement("th");
                 th.className = "playerNimi";
                 th.textContent = initials;
                 tableHeader.appendChild(th);
 
-                // Päis: Tulemus
                 const thTul = document.createElement("th");
-                // Kui Diff on null või tühi string, kuva midagi muud või 0
                 const displayDiff = (player.Diff === null || player.Diff === "") ? "-" : player.Diff;
                 const place = player.Place ? `(${player.Place})` : "";
                 thTul.textContent = `${displayDiff} ${place}`;
                 tableHeaderTulemus.appendChild(thTul);
 
-                // Päis: Rating
                 const thRating = document.createElement("th");
                 let ratingVal = "-";
                 if (player.Diff !== null && player.Diff !== "" && ratingKordaja) {
@@ -373,7 +397,6 @@
                 tableHeaderRating.appendChild(thRating);
             });
 
-            // Tabeli sisu
             const tableBody = document.getElementById("table-body");
             tableBody.innerHTML = "";
 
@@ -381,11 +404,9 @@
 
             const playedHolesCount = new Array(results.length).fill(0);
 
-            // Itereeri läbi radade (korvide)
             for (let i = 0; i < results[0].PlayerResults.length; i++) {
                 const row = document.createElement("tr");
 
-                // Korvi numbri lahter
                 const tdKorv = document.createElement("td");
                 const divK = document.createElement("div");
                 divK.className = "korviNumber";
@@ -402,7 +423,6 @@
                 }
                 row.appendChild(tdKorv);
 
-                // Iga mängija tulemus sellel rajal
                 results.forEach((player, playerIndex) => {
                     const td = document.createElement("td");
                     const pr = player.PlayerResults[i];
@@ -412,11 +432,9 @@
                         
                         const { Result: res, Diff: diff, PEN: penalty } = pr;
 
-                        // Värvi loogika
                         if (res == 1) {
                             td.classList.add("holari");
                         } else {
-                            // diff on string API-s mõnikord, castime
                             td.classList.add(`par${diff}`);
                         }
 
@@ -425,7 +443,6 @@
                         }
                         td.textContent = res;
                     } else {
-                        // Mängimata rada
                         td.textContent = "";
                     }
                     row.appendChild(td);
@@ -434,14 +451,12 @@
                 tableBody.appendChild(row);
             }
 
-            // Läbitud korvide rida päisesse (dünaamiliselt täidetud loopis, nüüd lisame DOM-i)
             results.forEach((player, idx) => {
                 const thLab = document.createElement("th");
                 thLab.textContent = `${playedHolesCount[idx]}/${results[idx].PlayerResults.length}`;
                 tableHeaderLabitud.appendChild(thLab);
             });
 
-            // Sulge seaded automaatselt, et näha tulemusi
             const collapseElement = document.getElementById('collapseSettings');
             const bsCollapse = bootstrap.Collapse.getInstance(collapseElement);
             if(bsCollapse) bsCollapse.hide();
