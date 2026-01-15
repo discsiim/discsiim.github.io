@@ -1,322 +1,289 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
-	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-T81QWPXXR1"></script>
-	<script>
-  		window.dataLayer = window.dataLayer || [];
-  		function gtag(){dataLayer.push(arguments);}
-  		gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T81QWPXXR1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-  		gtag('config', 'G-T81QWPXXR1');
-	</script>
+        gtag('config', 'G-T81QWPXXR1');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- ✅ Bootstrap CSS -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Täna me ei skoori!</title>
-  <style>
-    body {
-      background-color: #fffdf9;
-      font-family: "Segoe UI", sans-serif;
-    }
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fffdf9;
+            --color-par-minus-1: #3ec30057;
+            --color-par-minus-2: #3ec300a3;
+            --color-par-plus-1: #f42b031f;
+            --color-par-plus-2: #f42b0342;
+            --color-par-plus-3: #f42b036b;
+            --color-ace: #ffb400;
+            --header-bg: #444;
+            --header-text: #fff;
+            --sub-header-bg: #777;
+            --rating-bg: #BBB;
+            --rating-text: #444;
+        }
 
-    h2 {
-      font-size: 1rem;
-      font-weight: 700;
-    }
+        body {
+            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
 
-    /* Mängijate tabeli värvid ja efektid */
-    table {
-      font-size: 14px;
-      line-height: 16px;
-      border-collapse: collapse;
-    }
+        /* Tabeli stiilid */
+        .table-container {
+            overflow-x: auto;
+            position: relative;
+            max-height: 80vh; /* Hoiab tabeli ekraani piires */
+        }
 
-    table th, table td {
-      text-align: center;
-      padding: 4px 3px;
-      border: 1px solid #dee2e6;
-    }
+        table {
+            font-size: 14px;
+            line-height: 16px;
+            border-collapse: separate; /* Vajalik sticky headeri jaoks borderitega */
+            border-spacing: 0;
+            width: 100%;
+        }
 
-    thead {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
+        table td, table th {
+            border: 1px solid #d8dfdb;
+            text-align: center;
+            padding: 6px 4px;
+            vertical-align: middle;
+        }
 
-    tr#table-header {
-      background-color: #212529;
-      color: #fff;
-    }
+        /* Sticky Header Logic */
+        thead th {
+            position: sticky;
+            z-index: 10;
+        }
 
-    tr#tulemus {
-      background-color: #6c757d;
-      color: white;
-    }
+        /* Määrame sticky positsioonid igale päisereale */
+        tr#table-header th { top: 0; background-color: var(--header-bg); color: var(--header-text); border-color: #555; height: 40px; }
+        tr#tulemus th { top: 40px; background-color: var(--sub-header-bg); color: white; font-size: 0.85em; height: 30px; }
+        tr#rating th { top: 70px; background-color: var(--rating-bg); color: var(--rating-text); font-size: 0.85em; height: 30px; }
+        tr#labitud th { top: 100px; background-color: white; color: #777; font-size: 0.85em; height: 30px; border-bottom: 2px solid #ccc; }
 
-    tr#rating {
-      background-color: #adb5bd;
-      color: #333;
-    }
+        /* Tulemuste värvid */
+        td.par-1 { background-color: var(--color-par-minus-1); }
+        td.par-2 { background-color: var(--color-par-minus-2); }
+        td.par1 { background-color: var(--color-par-plus-1); }
+        td.par2 { background-color: var(--color-par-plus-2); }
+        td.par3, td.par4, td.par5, td.par6 { background-color: var(--color-par-plus-3); }
+        td.holari { background-color: var(--color-ace) !important; font-weight: bold; }
+        td.penalty { border: 2px solid red !important; }
 
-    tr#labitud {
-      background-color: #f8f9fa;
-      color: #777;
-    }
+        .korviNumber { font-weight: 700; font-size: 1.1em; }
+        .numberAlt { color: #777; font-size: 0.8em; display: block; }
+        
+        .playerNimi { font-weight: 600; text-transform: uppercase; }
 
-    td.par-1 { background-color: #3ec30057; }
-    td.par-2 { background-color: #3ec300a3; }
-    td.par1 { background-color: #f42b031f; }
-    td.par2 { background-color: #f42b0342; }
-    td.par3, td.par4, td.par5, td.par6 { background-color: #f42b036b; }
+        /* Legend */
+        #lyhendid { font-size: 0.85em; color: #555; line-height: 1.4; }
 
-    td.holari { background-color: #ffb400; }
-    td.penalty { border: 2px solid red; }
-
-    /* Stiilne oranž nupp */
-    .refresh {
-      background-color: #ff6700;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 10px;
-      width: 100%;
-      margin-top: 10px;
-      font-size: 16px;
-      font-weight: 500;
-      transition: background-color 0.2s, transform 0.1s;
-    }
-
-    .refresh:hover {
-      background-color: #dd5a00;
-      transform: scale(1.02);
-    }
-
-    /* Bootstrap accordion-like collapsible */
-    .collapsible {
-      background-color: #6c757d;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 8px;
-      width: 100%;
-      text-align: center;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .collapsible:hover {
-      background-color: #495057;
-    }
-	
-	.collapsible:after {
-		  content: '\002B';
-		  color: white;
-		  font-weight: bold;
-		  float: right;
-		  margin-left: 5px;
-	}
-	.active:after {
-		  content: "\2212";
-	}
-
-    .settings {
-		padding: 12px;
-		max-height: 0;
-		overflow: hidden;
-		transition: max-height 0.2s ease-out;
-		border-radius: 0 0 10px 10px;
-		background-color: #f8f9fa;
-		border: 1px solid #dee2e6;
-		margin-bottom: 12px;
-    }
-
-    div#lyhendid {
-      font-size: 0.85em;
-      margin-bottom: 10px;
-      color: #666;
-    }
-
-    .playerNimi {
-      font-weight: 600;
-    }
-  </style>
+        /* Checkbox list stiilid */
+        .player-checkbox-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            background: #fff;
+        }
+        .form-check {
+            margin-bottom: 0.25rem;
+        }
+        
+        /* Custom Orange Button */
+        .btn-orange {
+            background-color: #ff6700;
+            border-color: #ff6700;
+            color: white;
+        }
+        .btn-orange:hover, .btn-orange:active, .btn-orange:focus {
+            background-color: #dd5a00;
+            border-color: #dd5a00;
+            color: white;
+        }
+    </style>
 </head>
-<body class="container py-3">
+<body>
 
-  <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#settingsPanel" aria-expanded="false" aria-controls="settingsPanel">
-      ⚙️ Seaded
-    </button>
-  <div class="collapse" id="settingsPanel">
-    <h2>Mängu URL:</h2>
-    <div class="input-group mb-2">
-      <input type="text" id="gameID" class="form-control" placeholder="https://discgolfmetrix.com/...">
-      <button class="btn btn-secondary" onclick="loadPlayers()">Lae mängijad</button>
+<div class="container-fluid py-3 px-2">
+    <!-- Seaded Accordion -->
+    <div class="accordion mb-3" id="settingsAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
+                    ⚙️ Seaded ja Mängijad
+                </button>
+            </h2>
+            <div id="collapseSettings" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body bg-light">
+                    <div class="mb-3">
+                        <label for="gameID" class="form-label fw-bold">Mängu URL või ID:</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="gameID" placeholder="https://discgolfmetrix.com/..." value="3213882">
+                            <button class="btn btn-primary" type="button" onclick="loadPlayers()">Lae mängijad</button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Vali mängijad:</label>
+                        <div class="d-flex gap-2 mb-2">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="toggleAllPlayers(true)">Vali kõik</button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="toggleAllPlayers(false)">Tühista valik</button>
+                        </div>
+                        <div id="playerCheckboxes" class="player-checkbox-list">
+                            <div class="text-muted small p-2">Mängijate laadimiseks sisesta ID ja vajuta nuppu...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <h2>Vali mängijad:</h2>
-    <select id="playerSelect" multiple class="form-select"></select>
-  </div>
+    <!-- Juhtnupud -->
+    <button type="button" class="btn btn-orange w-100 py-2 mb-3 fw-bold shadow-sm" onclick="fetchResults()">
+        🔄 Lae / Värskenda tulemusi
+    </button>
 
-  <button type="button" class="refresh" onclick="fetchResults()">🔄 Lae / värskenda tulemusi</button>
+    <!-- Legend -->
+    <div id="lyhendid" class="mb-2 px-1"></div>
 
-  <div id="lyhendid" class="mt-2"></div>
+    <!-- Tulemuste tabel -->
+    <div class="table-container shadow-sm rounded">
+        <table class="table mb-0">
+            <thead>
+                <tr id="table-header">
+                    <!-- Mängijate initsiaalid -->
+                    <th>#</th>
+                </tr>
+                <tr id="tulemus">
+                    <!-- +/- skoor -->
+                    <th>+/-</th>
+                </tr>
+                <tr id="rating">
+                    <!-- Reiting -->
+                    <th>Rtg</th>
+                </tr>
+                <tr id="labitud">
+                    <!-- Läbitud korvid -->
+                    <th>Läb</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- Sisu genereeritakse JS-iga -->
+            </tbody>
+        </table>
+    </div>
+</div>
 
-  <div class="table-responsive mt-3">
-    <table class="table table-bordered table-sm align-middle text-center">
-      <thead>
-        <tr id="table-header"><th></th></tr>
-        <tr id="tulemus"><th>+/-</th></tr>
-        <tr id="rating"><th>Rtg</th></tr>
-        <tr id="labitud"><th>Läb</th></tr>
-      </thead>
-      <tbody id="table-body"></tbody>
-    </table>
-  </div>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Bootstrap JS (vajalik mõne komponendi jaoks) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-	
-    <script>
-		let competitionID = "3213882";
-        let courseID="";
-        const pCode="PtEwQhiM7PMOc6NMEv0tk9pBW4Rthaum";
-        let ratingKordaja = 0;   
-        let ratingVabaliige = 0; 
-        let par0Value = 0;
+<script>
+    let competitionID = "";
+    let courseID = "";
+    // Märkus: API kood peaks ideaalis olema server-side või peidetud, 
+    // kuid front-end lahenduse puhul on see paratamatu.
+    const pCode = "PtEwQhiM7PMOc6NMEv0tk9pBW4Rthaum";
+    let ratingKordaja = 0;   
+    let ratingVabaliige = 0; 
+    let par0Value = 0;
 
-        async function fetchResults() {
-            const response = await fetch(`https://discgolfmetrix.com/api.php?content=result&id=${competitionID}`);
-            const json = await response.json();
+    // Helper: Parsib URL-ist või stringist ID
+    function getCompetitionIdFromInput() {
+        const inputVal = document.getElementById("gameID").value.trim();
+        if (inputVal.includes("discgolfmetrix.com")) {
+            const parts = inputVal.split("/");
+            // Eemaldame tühjad stringid (juhul kui URL lõppeb /)
+            const cleanParts = parts.filter(p => p !== "");
+            // ID on tavaliselt viimane osa või ?id= parameeter
+            // Lihtsustatud loogika viimase osa võtmiseks:
+            return cleanParts.pop().split("?")[0]; 
+        }
+        return inputVal;
+    }
 
-            const selectedPlayers = Array.from(document.getElementById("playerSelect").selectedOptions)
-                .map(opt => opt.value);
-            const results = json.Competition.Results.filter(p => selectedPlayers.includes(p.UserID));
-            const korvid = json.Competition.Tracks;
-
-            const divLyhendid = document.getElementById("lyhendid");
-            divLyhendid.innerHTML = "";
-
-            const tableHeader = document.getElementById("table-header");
-            const tableHeaderTulemus = document.getElementById("tulemus");
-            const tableHeaderLabitud = document.getElementById("labitud");
-            const tableHeaderRating = document.getElementById("rating");
-
-            tableHeader.innerHTML = "<th></th>";
-            tableHeaderTulemus.innerHTML = "<th>+/-</th>";
-            tableHeaderLabitud.innerHTML = "<th>Läb</th>";
-            tableHeaderRating.innerHTML = "<th>Rtg</th>";
-
-            for (const player of results) {
-                const th = document.createElement("th");
-                th.classList.add("playerNimi");
-
-                // Kuvatakse ainult initsiaalid:
-                const initials = player.Name.split(" ").map(n => n.charAt(0)).join("");
-                divLyhendid.textContent += `${initials}: ${player.Name}, `;
-                th.textContent = initials;
-                tableHeader.appendChild(th);
-
-                const thTul = document.createElement("th");
-                thTul.textContent = `${player.Diff} (${player.Place})`;
-                tableHeaderTulemus.appendChild(thTul);
-
-                const thRating=document.createElement("th");
-                let ratingVal=getRating(parseInt(player.Diff));
-                thRating.textContent=`${Math.round(ratingVal)}`;
-                tableHeaderRating.appendChild(thRating);
-            }
-
-            const tableBody = document.getElementById("table-body");
-            tableBody.innerHTML = "";
-
-            const playedHolesCount = new Array(results.length).fill(0);
-
-            for (let i = 0; i < results[0].PlayerResults.length; i++) {
-                const row = document.createElement("tr");
-
-                const tdKorv = document.createElement("td");
-                const divK = document.createElement("div");
-                divK.classList.add("korviNumber");
-
-                const korv = korvid[i];
-                divK.textContent = korv.Number;
-                tdKorv.appendChild(divK);
-
-                if (korv.NumberAlt) {
-                    const divAlt = document.createElement("div");
-                    divAlt.classList.add("numberAlt");
-                    divAlt.textContent = `(${korv.NumberAlt})`;
-                    tdKorv.appendChild(divAlt);
-                }
-
-                row.appendChild(tdKorv);
-
-                for (let col = 0; col < results.length; col++) {
-                    const td = document.createElement("td");
-                    const pr = results[col].PlayerResults[i];
-
-                    if (pr && pr.Result !== undefined && pr.Result !== "") {
-                        playedHolesCount[col]++;
-                    }
-
-                    if (pr) {
-                        const { Result: res, Diff: diff, PEN: penalty } = pr;
-
-                        if (res == 1) {
-                            td.classList.add("holari");
-                        } else {
-                            td.classList.add(`par${diff}`);
-                        }
-
-                        if (penalty == 1) {
-                            td.classList.add("penalty");
-                        }
-
-                        td.textContent = res;
-                    }
-
-                    row.appendChild(td);
-                }
-
-                tableBody.appendChild(row);
-            }
-
-            // läbitud/läbimata korvid
-            for (let i = 0; i < results.length; i++) {
-                const thLab = document.createElement("th");
-                thLab.textContent = `${playedHolesCount[i]}/${results[i].PlayerResults.length}`;
-                tableHeaderLabitud.appendChild(thLab);
-            }
+    async function loadPlayers() {
+        competitionID = getCompetitionIdFromInput();
+        if (!competitionID) {
+            alert("Palun sisesta korrektne ID või URL");
+            return;
         }
 
-        async function loadPlayers() {
-            const compUrl = document.getElementById("gameID").value;
-            competitionID = compUrl.split("/").pop();
+        try {
+            const response = await fetch(`https://discgolfmetrix.com/api.php?content=result&id=${competitionID}`);
+            const json = await response.json();
             
-            const response = await fetch(`https://discgolfmetrix.com/api.php?content=result&id=${competitionID}`);
-            const json = await response.json();
-            courseID=json.Competition.CourseID;
-
-
-
-            const select = document.getElementById("playerSelect");
-            select.innerHTML = "";
-
-            // Sorteeri mängijad nime järgi
-            json.Competition.Results.sort((a, b) => a.Name.localeCompare(b.Name));
-
-            for (const player of json.Competition.Results) {
-                const option = document.createElement("option");
-                option.value = player.UserID;
-                option.textContent = player.Name;
-                select.appendChild(option);
+            if (!json.Competition) {
+                alert("Viga andmete laadimisel. Kontrolli ID-d.");
+                return;
             }
+
+            courseID = json.Competition.CourseID;
+
+            const container = document.getElementById("playerCheckboxes");
+            container.innerHTML = "";
+
+            // Sorteeri nime järgi
+            const sortedResults = json.Competition.Results.sort((a, b) => a.Name.localeCompare(b.Name));
+
+            if (sortedResults.length === 0) {
+                container.innerHTML = "<div class='p-2'>Mängijaid ei leitud.</div>";
+                return;
+            }
+
+            sortedResults.forEach(player => {
+                const div = document.createElement("div");
+                div.className = "form-check";
+                
+                const checkbox = document.createElement("input");
+                checkbox.className = "form-check-input player-checkbox";
+                checkbox.type = "checkbox";
+                checkbox.value = player.UserID;
+                checkbox.id = `player-${player.UserID}`;
+                // Vaikimisi valime kõik, või laseme kasutajal valida
+                // checkbox.checked = true; 
+
+                const label = document.createElement("label");
+                label.className = "form-check-label";
+                label.htmlFor = `player-${player.UserID}`;
+                label.textContent = player.Name;
+
+                div.appendChild(checkbox);
+                div.appendChild(label);
+                container.appendChild(div);
+            });
+
+            // Ava seaded, kui need pole lahti (et kasutaja näeks mängijaid)
+            const collapseElement = document.getElementById('collapseSettings');
+            const bsCollapse = new bootstrap.Collapse(collapseElement, { toggle: false });
+            bsCollapse.show();
+
             loadCourseInfo();
+
+        } catch (error) {
+            console.error(error);
+            alert("Viga ühenduses Discgolfmetrixiga.");
         }
-        async function loadCourseInfo(){
-            const response = await fetch(`https://discgolfmetrix.com/api.php?content=course&id=${courseID}&code=PtEwQhiM7PMOc6NMEv0tk9pBW4Rthaum`);
+    }
+
+    function toggleAllPlayers(check) {
+        const checkboxes = document.querySelectorAll('.player-checkbox');
+        checkboxes.forEach(cb => cb.checked = check);
+    }
+
+    async function loadCourseInfo() {
+        try {
+            const response = await fetch(`https://discgolfmetrix.com/api.php?content=course&id=${courseID}&code=${pCode}`);
             const json = await response.json();
 
             const course = json.course;
@@ -326,33 +293,169 @@
             const ratingResult1 = parseFloat(course.RatingResult1);
             const ratingResult2 = parseFloat(course.RatingResult2);
 
-            //jooksva ringireitingu arvutamiseks vajalikud muutujad
+            // Reitingu arvutus
             ratingKordaja = (ratingValue2 - ratingValue1) / (ratingResult2 - ratingResult1);
             ratingVabaliige = ratingValue1 - ratingKordaja * ratingResult1;
 
-            // Sum all Par values
-            par0Value = baskets.reduce((sum, b) => sum + Number(b.Par || 0), 0);  
+            par0Value = baskets.reduce((sum, b) => sum + Number(b.Par || 0), 0);
+        } catch (e) {
+            console.log("Course info loading failed (might be expected for non-admin API)", e);
         }
-		function getRating(diff) {
-            return ratingKordaja * (diff+ par0Value) + ratingVabaliige;
+    }
+
+    function getRating(diff) {
+        if (!ratingKordaja) return 0; // Kui reitingu infot ei saadud
+        return ratingKordaja * (diff + par0Value) + ratingVabaliige;
+    }
+
+    async function fetchResults() {
+        competitionID = getCompetitionIdFromInput();
+        if (!competitionID) return;
+
+        // Leia valitud mängijad checkboxidest
+        const checkboxes = document.querySelectorAll('.player-checkbox:checked');
+        const selectedIds = Array.from(checkboxes).map(cb => cb.value);
+
+        if (selectedIds.length === 0) {
+            alert("Palun vali vähemalt üks mängija seadete alt.");
+            return;
         }
 
-		/*Settingud collapsible'iks*/
-		const coll = document.getElementsByClassName("collapsible");
-		let i;
+        try {
+            const response = await fetch(`https://discgolfmetrix.com/api.php?content=result&id=${competitionID}`);
+            const json = await response.json();
+            
+            const results = json.Competition.Results.filter(p => selectedIds.includes(p.UserID));
+            const korvid = json.Competition.Tracks;
 
-		for (i = 0; i < coll.length; i++) {
-		  coll[i].addEventListener("click", function() {
-			this.classList.toggle("active");
-			let content = this.nextElementSibling;
-			if (content.style.maxHeight){
-			  content.style.maxHeight = null;
-			} else {
-			  content.style.maxHeight = content.scrollHeight + "px";
-			} 
-		  });
-		}
-        //document.addEventListener("DOMContentLoaded", loadPlayers);
-    </script>
+            // Uuenda legendi
+            const divLyhendid = document.getElementById("lyhendid");
+            divLyhendid.innerHTML = "";
+
+            // Uuenda päiseid
+            const tableHeader = document.getElementById("table-header");
+            const tableHeaderTulemus = document.getElementById("tulemus");
+            const tableHeaderLabitud = document.getElementById("labitud");
+            const tableHeaderRating = document.getElementById("rating");
+
+            // Reset headers (säilita esimene tühi lahter)
+            tableHeader.innerHTML = "<th>#</th>";
+            tableHeaderTulemus.innerHTML = "<th>+/-</th>";
+            tableHeaderLabitud.innerHTML = "<th>Läb</th>";
+            tableHeaderRating.innerHTML = "<th>Rtg</th>";
+
+            results.forEach(player => {
+                const initials = player.Name.split(" ").map(n => n.charAt(0)).join("");
+                
+                // Lisa legendi
+                const badge = document.createElement("span");
+                badge.className = "badge bg-secondary me-1 mb-1 fw-normal";
+                badge.textContent = `${initials}: ${player.Name}`;
+                divLyhendid.appendChild(badge);
+
+                // Päis: Initsiaalid
+                const th = document.createElement("th");
+                th.className = "playerNimi";
+                th.textContent = initials;
+                tableHeader.appendChild(th);
+
+                // Päis: Tulemus
+                const thTul = document.createElement("th");
+                // Kui Diff on null või tühi string, kuva midagi muud või 0
+                const displayDiff = (player.Diff === null || player.Diff === "") ? "-" : player.Diff;
+                const place = player.Place ? `(${player.Place})` : "";
+                thTul.textContent = `${displayDiff} ${place}`;
+                tableHeaderTulemus.appendChild(thTul);
+
+                // Päis: Rating
+                const thRating = document.createElement("th");
+                let ratingVal = "-";
+                if (player.Diff !== null && player.Diff !== "" && ratingKordaja) {
+                    ratingVal = Math.round(getRating(parseInt(player.Diff)));
+                }
+                thRating.textContent = ratingVal;
+                tableHeaderRating.appendChild(thRating);
+            });
+
+            // Tabeli sisu
+            const tableBody = document.getElementById("table-body");
+            tableBody.innerHTML = "";
+
+            if (!results.length || !results[0].PlayerResults) return;
+
+            const playedHolesCount = new Array(results.length).fill(0);
+
+            // Itereeri läbi radade (korvide)
+            for (let i = 0; i < results[0].PlayerResults.length; i++) {
+                const row = document.createElement("tr");
+
+                // Korvi numbri lahter
+                const tdKorv = document.createElement("td");
+                const divK = document.createElement("div");
+                divK.className = "korviNumber";
+                
+                const korv = korvid[i];
+                divK.textContent = korv.Number;
+                tdKorv.appendChild(divK);
+
+                if (korv.NumberAlt) {
+                    const divAlt = document.createElement("span");
+                    divAlt.className = "numberAlt";
+                    divAlt.textContent = `(${korv.NumberAlt})`;
+                    tdKorv.appendChild(divAlt);
+                }
+                row.appendChild(tdKorv);
+
+                // Iga mängija tulemus sellel rajal
+                results.forEach((player, playerIndex) => {
+                    const td = document.createElement("td");
+                    const pr = player.PlayerResults[i];
+
+                    if (pr && pr.Result !== undefined && pr.Result !== "" && pr.Result !== null) {
+                        playedHolesCount[playerIndex]++;
+                        
+                        const { Result: res, Diff: diff, PEN: penalty } = pr;
+
+                        // Värvi loogika
+                        if (res == 1) {
+                            td.classList.add("holari");
+                        } else {
+                            // diff on string API-s mõnikord, castime
+                            td.classList.add(`par${diff}`);
+                        }
+
+                        if (penalty == 1) {
+                            td.classList.add("penalty");
+                        }
+                        td.textContent = res;
+                    } else {
+                        // Mängimata rada
+                        td.textContent = "";
+                    }
+                    row.appendChild(td);
+                });
+
+                tableBody.appendChild(row);
+            }
+
+            // Läbitud korvide rida päisesse (dünaamiliselt täidetud loopis, nüüd lisame DOM-i)
+            results.forEach((player, idx) => {
+                const thLab = document.createElement("th");
+                thLab.textContent = `${playedHolesCount[idx]}/${results[idx].PlayerResults.length}`;
+                tableHeaderLabitud.appendChild(thLab);
+            });
+
+            // Sulge seaded automaatselt, et näha tulemusi
+            const collapseElement = document.getElementById('collapseSettings');
+            const bsCollapse = bootstrap.Collapse.getInstance(collapseElement);
+            if(bsCollapse) bsCollapse.hide();
+
+        } catch (error) {
+            console.error(error);
+            alert("Viga tulemuste laadimisel.");
+        }
+    }
+</script>
+
 </body>
 </html>
