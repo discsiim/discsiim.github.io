@@ -110,6 +110,22 @@
             border-bottom: 2px solid #ccc; 
         }
 
+        /* --- LOOGIKA REITINGU PEITMISEKS --- */
+        
+        /* Kui body küljes on klass .hide-rating, peida reitingu rida */
+        body.hide-rating tr#rating {
+            display: none;
+        }
+
+        /* Kui reiting on peidus, tuleb alumine rida (läbitud) tõsta kõrgemale, 
+           et ei jääks tühja auku. 
+           Arvutus: 32px (nimed) + 22px (tulemus) = 54px */
+        body.hide-rating tr#labitud th {
+            top: 54px; 
+        }
+
+        /* --- VÄRVID --- */
+
         /* Tulemuste värvid */
         td.par-1 { background-color: var(--color-par-minus-1); }
         td.par-2 { background-color: var(--color-par-minus-2); }
@@ -195,7 +211,7 @@
                         </div>
                     </div>
                     
-                    <div class="mb-1">
+                    <div class="mb-2">
                         <label class="form-label fw-bold small mb-1">Vali mängijad:</label>
                         <div class="d-flex gap-2 mb-2">
                             <button class="btn btn-sm btn-outline-secondary py-0" style="font-size: 0.8rem;" onclick="toggleAllPlayers(true)">Vali kõik</button>
@@ -205,6 +221,15 @@
                             <div class="text-muted small p-1">Kopeeri ülespoole mängu link või ID ja vajuta "Lae mängijad"...</div>
                         </div>
                     </div>
+
+                    <!-- UUS: Reitingu näitamise lüliti -->
+                    <div class="border-top pt-2 mt-2">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="showRating" checked onchange="toggleRating()">
+                            <label class="form-check-label small fw-bold" for="showRating">Näita reitingu rida (Rtg)</label>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -256,6 +281,13 @@
     let ratingKordaja = 0;   
     let ratingVabaliige = 0; 
     let par0Value = 0;
+
+    // Toggle Rating funktsioon
+    function toggleRating() {
+        const checkbox = document.getElementById('showRating');
+        // Kui checkbox EI OLE valitud, lisa klass 'hide-rating', vastasel juhul eemalda
+        document.body.classList.toggle('hide-rating', !checkbox.checked);
+    }
 
     function getCompetitionIdFromInput() {
         const inputVal = document.getElementById("gameID").value.trim();
@@ -476,6 +508,9 @@
                 thLab.textContent = `${playedHolesCount[idx]}/${results[idx].PlayerResults.length}`;
                 tableHeaderLabitud.appendChild(thLab);
             });
+
+            // Veendu, et ratingu toggle oleks õige
+            toggleRating();
 
             const collapseElement = document.getElementById('collapseSettings');
             const bsCollapse = bootstrap.Collapse.getInstance(collapseElement);
