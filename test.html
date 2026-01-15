@@ -40,21 +40,25 @@
         .table-container {
             overflow-x: auto;
             position: relative;
-            max-height: 85vh; /* Hoiab tabeli ekraani piires, suurendatud pisut */
+            max-height: 88vh; /* Veel rohkem ruumi tabelile */
         }
 
         table {
-            font-size: 14px;
-            line-height: 14px; /* Tihedam tekst */
+            font-size: 13px; /* Veidi väiksem font */
+            line-height: 1; /* Minimaalne reavahe */
             border-collapse: separate; 
             border-spacing: 0;
             width: 100%;
         }
 
+        /* Jõuline paddingu vähendamine, et tühistada Bootstrap */
+        .table > :not(caption) > * > * {
+            padding: 3px 3px !important;
+        }
+
         table td, table th {
             border: 1px solid #d8dfdb;
             text-align: center;
-            padding: 2px 1px; /* Vähendatud padding vertikaalseks kokkusurumiseks */
             vertical-align: middle;
         }
 
@@ -65,7 +69,7 @@
         }
 
         /* Määrame uued, tihedamad sticky positsioonid */
-        /* Kokku headeri kõrgus: 32 + 22 + 22 + 22 = 98px (enne oli 130px) */
+        /* Kokku headeri kõrgus: 32 + 22 + 22 + 22 = 98px */
         
         tr#table-header th { 
             top: 0; 
@@ -74,6 +78,9 @@
             border-color: #555; 
             height: 32px; 
             font-size: 0.9em;
+            /* Headeril natuke rohkem paddingut, et tekst oleks keskel */
+            padding-top: 4px !important; 
+            padding-bottom: 4px !important;
         }
         
         tr#tulemus th { 
@@ -110,8 +117,18 @@
         td.holari { background-color: var(--color-ace) !important; font-weight: bold; }
         td.penalty { border: 2px solid red !important; }
 
-        .korviNumber { font-weight: 700; font-size: 1.1em; }
-        .numberAlt { color: #777; font-size: 0.8em; display: block; line-height: 1; }
+        .korviNumber { 
+            font-weight: 700; 
+            font-size: 1em; /* Vähendatud suurus */
+            line-height: 1;
+        }
+        .numberAlt { 
+            color: #777; 
+            font-size: 0.75em; 
+            display: block; 
+            line-height: 1; 
+            margin-top: 1px; /* Väike vahe */
+        }
         
         .playerNimi { font-weight: 600; text-transform: uppercase; }
 
