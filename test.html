@@ -129,7 +129,7 @@
                     <div class="mb-3">
                         <label for="gameID" class="form-label fw-bold">Mängu URL või ID:</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="gameID" placeholder="https://discgolfmetrix.com/..." value="3213882">
+                            <input type="text" class="form-control" id="gameID" placeholder="Kopeeri siia mängu link: https://discgolfmetrix.com/...">
                             <button class="btn btn-primary" type="button" onclick="loadPlayers()">Lae mängijad</button>
                         </div>
                     </div>
@@ -202,12 +202,8 @@
     function getCompetitionIdFromInput() {
         const inputVal = document.getElementById("gameID").value.trim();
         if (inputVal.includes("discgolfmetrix.com")) {
-            const parts = inputVal.split("/");
-            // Eemaldame tühjad stringid (juhul kui URL lõppeb /)
-            const cleanParts = parts.filter(p => p !== "");
-            // ID on tavaliselt viimane osa või ?id= parameeter
-            // Lihtsustatud loogika viimase osa võtmiseks:
-            return cleanParts.pop().split("?")[0]; 
+            competitionID = inputVal.split("/").pop();
+            return competitionID; 
         }
         return inputVal;
     }
